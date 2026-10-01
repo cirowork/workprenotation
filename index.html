@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Richieste Lvori</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f1f0f;
+            color: white;
+        }
+
+        header {
+            background: #0b2b0b;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #7cff7c;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #122912;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px #0a3d0a;
+        }
+
+        label {
+            font-size: 18px;
+            margin-top: 15px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: none;
+            background: #1f3d1f;
+            color: white;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            background: #1fa31f;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+
+        button:hover {
+            background: #27c827;
+        }
+
+        .success {
+            margin-top: 20px;
+            padding: 12px;
+            background: #1f4d1f;
+            border-left: 5px solid #2fff2f;
+            border-radius: 6px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>Richiedi _spendere</header>
+
+<div class="container">
+    <label>Il tuo nome Discord</label>
+    <input id="username" placeholder="es.Discord#1234" />
+
+    <label>Seleziona il lavoro</label>
+    <select id="job">
+        <option value="Social Media Manager">Social Media Manager</option>
+        <option value="Web & Discord Developer">Web & Discord Developer</option>
+    </select>
+
+    <button onclick="sendRequest()">Invia Richiesta</button>
+
+    <div class="success" id="successBox">
+        ✔ Richiesta inviata con successo!
+    </div>
+</div>
+
+<script>
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1555245042694623274/T3ek_Q2JZE-cm2JEYsXK8D2c7Px--uvD_ksJGj7JZhslJbtr-l2x45wU-HU9AuogHDcd";
+
+    function sendRequest() {
+        const user = document.getElementById("username").value;
+        const job = document.getElementById("job").value;
+
+        if (!user) {
+            alert("Inserisci il tuo nome Discord");
+            return;
+        }
+
+        const embed = {
+            content: "@everyone",
+            embeds: [
+                {
+                    title: "📩 Nuova Richiesta",
+                    description: `👤 **Richiesto da:** ${user}\n💼 **Lavoro selezionato:** ${job}`,
+                    color: 5763719,
+                    footer: {
+                        text: "_spendere.  – Richieste automatiche"
+                    }
+                }
+            ]
+        };
+
+        fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(embed)
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error("Webhook non disponibile");
+            }
+            document.getElementById("successBox").style.display = "block";
+        }).catch(() => {
+            alert("Si è verificato un errore durante l'invio della richiesta.");
+        });
+    }
+</script>
+
+</body>
+</html>
